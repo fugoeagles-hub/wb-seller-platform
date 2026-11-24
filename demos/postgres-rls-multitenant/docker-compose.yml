@@ -1,0 +1,13 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD, see .env.example}
+      POSTGRES_DB: rls_demo
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:?set APP_DB_PASSWORD, see .env.example}
+    ports:
+      - "127.0.0.1:${PG_PORT:-55432}:5432"
+    volumes:
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./db/02_app_password.sh:/docker-entrypoint-initdb.d/02_app_password.sh:ro
